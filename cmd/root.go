@@ -5,8 +5,9 @@ import (
 )
 
 var (
-	// Путь к JSON-файлу можно менять через флаг --storage
-	storagePath string
+	storagePath     string
+	descriptionTask string
+	statusTask      string
 
 	RootCmd = &cobra.Command{
 		Use:   "taskmanager",
@@ -17,6 +18,8 @@ var (
 func init() {
 	// глобальный флаг для всего CLI
 	RootCmd.PersistentFlags().StringVar(&storagePath, "storage", "storage/tasks.json", "путь к файлу с задачами")
+	RootCmd.PersistentFlags().StringVar(&descriptionTask, "d", "", "Описание задачи")
+	RootCmd.PersistentFlags().StringVar(&statusTask, "s", "", "Статус задачи")
 	// регистрируем subcommand list
-	RootCmd.AddCommand(ListCmd)
+	RootCmd.AddCommand(ListCmd, AddCmd)
 }

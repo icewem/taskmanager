@@ -3,13 +3,26 @@ package storage
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/google/uuid"
 	"log"
 	"os"
 )
 
-// Task — модель одной задачи
+const (
+	StatusNew        = "new"
+	StatusInProgress = "in_progress"
+	StatusDone       = "done"
+)
+
+var validStatuses = []string{
+	StatusNew,
+	StatusInProgress,
+	StatusDone,
+}
+
+// Task базовая структура задачи
 type Task struct {
-	ID          int    `json:"ID"`
+	ID          string `json:"ID"`
 	Description string `json:"Description"`
 	Status      string `json:"Status"`
 }
@@ -32,14 +45,22 @@ func LoadTasks(path string) ([]Task, error) {
 	return tasks, nil
 }
 
-func createTask(description, status string) {
+func CreateTask(description, status string, taskList []Task) error {
+
+	if !isValidStatus(status) {
+		log.Printf("Статус %v не доступен, доступные варианты: %s\n", status, validStatuses)
+		return nil
+	}
+
+	id := uuid.New().String()
+
 	newTask := Task{
-		ID:          len(tasksSlice) + 1,
+		ID:          id,
 		Description: description,
 		Status:      status,
 	}
 
-	tasksSlice = append(tasksSlice, newTask)
+	tasksSlice = append(taskList, newTask)
 
 	outData, err := json.Marshal(tasksSlice)
 	if err != nil {
@@ -51,4 +72,15 @@ func createTask(description, status string) {
 	}
 
 	log.Println("Задача добавлена успешно")
+
+	return nil
+}
+
+func isValidStatus(s string) bool {
+	for _, vs := range validStatuses {
+		if vs == s {
+			return true
+		}
+	}
+	return false
 }
