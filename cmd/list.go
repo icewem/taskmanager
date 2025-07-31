@@ -8,8 +8,9 @@ import (
 )
 
 var ListCmd = &cobra.Command{
-	Use:   "list",
-	Short: "вывести все созданные задачи",
+	Use:     "list",
+	Example: "list",
+	Short:   "вывести все созданные задачи",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// считываем данные из json
 		tasks, err := storage.LoadTasks(storagePath)
@@ -44,8 +45,9 @@ var ListCmd = &cobra.Command{
 	},
 }
 var AddCmd = &cobra.Command{
-	Use:   "add",
-	Short: "Добавить новую задачу",
+	Use:     "add",
+	Short:   "Добавить новую задачу",
+	Example: "add --d \"Текст задачи\" --s \"in_progress\"",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// считываем данные из json
 		tasks, err := storage.LoadTasks(storagePath)
