@@ -4,8 +4,11 @@ import (
 	"fmt"
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
+	"strings"
 	"taskmanager/storage"
 )
+
+var statuses string
 
 var ListCmd = &cobra.Command{
 	Use:     "list",
@@ -22,10 +25,16 @@ var ListCmd = &cobra.Command{
 			return nil
 		}
 
-		// вывод результата в таблице
+		filteredTasks := tasks
+		if statuses != "" {
+			statusList := strings.Split(statuses, ",")
+			filteredTasks = filterTasks(tasks, statusList)
+		}
+
+		// вывод результата в таблицу
 		table := tablewriter.NewWriter(cmd.OutOrStdout())
 		table.Header([]string{"ID", "Описание задачи", "Status"})
-		for _, t := range tasks {
+		for _, t := range filteredTasks {
 			err := table.Append([]string{
 				t.ID,
 				t.Description,
@@ -44,6 +53,20 @@ var ListCmd = &cobra.Command{
 		return nil
 	},
 }
+
+func filterTasks(tasks []storage.Task, statuses []string) []storage.Task {
+	var filtered []storage.Task
+	for _, task := range tasks {
+		for _, status := range statuses {
+			if strings.TrimSpace(status) == task.Status {
+				filtered = append(filtered, task)
+				break
+			}
+		}
+	}
+	return filtered
+}
+
 var AddCmd = &cobra.Command{
 	Use:     "add",
 	Short:   "Добавить новую задачу",
@@ -54,6 +77,7 @@ var AddCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
+		// ToDo Надо бы создавать файл если его почему-то нет
 		if len(tasks) == 0 {
 			fmt.Println("задач нет")
 			return nil
