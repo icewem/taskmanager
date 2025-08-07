@@ -67,7 +67,7 @@ func CreateTask(description, status string, taskList []Task) error {
 		log.Fatalf("cannot marshal JSON: %v", err)
 	}
 
-	if err := os.WriteFile("storage/tasks.json", outData, 0644); err != nil {
+	if err := os.WriteFile("internal/storage/tasks.json", outData, 0644); err != nil {
 		log.Fatalf("write file: %v", err)
 	}
 
