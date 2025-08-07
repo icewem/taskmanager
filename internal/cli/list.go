@@ -1,11 +1,11 @@
-package cmd
+package cli
 
 import (
 	"fmt"
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
 	"strings"
-	"taskmanager/storage"
+	"taskmanager/internal/storage"
 )
 
 var statuses string
