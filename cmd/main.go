@@ -1,12 +1,7 @@
 package main
 
-import (
-	"log"
-	"taskmanager/internal/cli"
-)
+import "taskManager/internal"
 
 func main() {
-	if err := cli.RootCmd.Execute(); err != nil {
-		log.Fatal(err)
-	}
+	internal.StartHttpServer()
 }
