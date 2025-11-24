@@ -2,8 +2,14 @@ package internal
 
 import (
 	"fmt"
+	"html/template"
 	"net/http"
 )
+
+type Page struct {
+	Title   string
+	Content string
+}
 
 func StartHttpServer() {
 	http.HandleFunc("/", homePage)
@@ -13,11 +19,15 @@ func StartHttpServer() {
 }
 
 func homePage(writer http.ResponseWriter, request *http.Request) {
-	if request.URL.Path != "/" {
-		http.NotFound(writer, request)
+	p := &Page{
+		Title:   "Home Page",
+		Content: "Welcome to the home page!",
+	}
+	t := template.Must(template.ParseFiles("internal/homePage.html"))
+	err := t.Execute(writer, p)
+	if err != nil {
 		return
 	}
-	fmt.Fprint(writer, "Welcome to the homePage")
 }
 
 func createPage(writer http.ResponseWriter, request *http.Request) {
