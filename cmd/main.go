@@ -1,7 +1,11 @@
 package main
 
-import "taskManager/internal"
+import (
+	"taskManager/internal"
+)
 
 func main() {
-	internal.StartHttpServer()
+	srv := internal.New()
+	srv.RegisterRoutes()
+	srv.Start(":8080")
 }

@@ -1,0 +1,10 @@
+### Получить список задач
+GET http://localhost:8080/task/get
+
+### Создать задачу
+POST http://localhost:8080/task/create
+Content-Type: application/json
+
+{
+
+}
