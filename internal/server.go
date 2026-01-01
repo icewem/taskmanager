@@ -15,10 +15,10 @@ func New() *Server {
 	}
 }
 
-func (s *Server) RegisterRoutes() {
-	userHandler := NewUserHandler()
+func (s *Server) RegisterRoutes(repo TaskRepository) {
+	taskHandler := NewUserHandler(repo)
 
-	s.mux.HandleFunc("/task/get", userHandler.GetTasks)
+	s.mux.HandleFunc("/task/get", taskHandler.GetTasks)
 }
 
 func (s *Server) Start(addr string) error {
